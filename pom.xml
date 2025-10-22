@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.vinicius</groupId>
-	<artifactId>sistema-pedidos-cliente</artifactId>
+	<artifactId>sistema-pedidos-gestao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sistema-pedidos-cliente</name>
+	<name>sistema-pedidos-gestao</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
