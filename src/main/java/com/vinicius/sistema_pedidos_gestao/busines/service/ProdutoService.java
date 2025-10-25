@@ -1,10 +1,6 @@
 package com.vinicius.sistema_pedidos_gestao.busines.service;
-
-import com.vinicius.sistema_pedidos_gestao.busines.dto.CategoriaCadastroDTO;
 import com.vinicius.sistema_pedidos_gestao.busines.dto.ProdutoCadastroDTO;
-import com.vinicius.sistema_pedidos_gestao.insfratructure.entitys.Categoria;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.entitys.Produto;
-import com.vinicius.sistema_pedidos_gestao.insfratructure.repository.CategoriaRepository;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
