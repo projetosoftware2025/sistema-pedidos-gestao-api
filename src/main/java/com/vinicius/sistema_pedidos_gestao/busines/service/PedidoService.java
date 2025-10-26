@@ -1,9 +1,9 @@
 package com.vinicius.sistema_pedidos_gestao.busines.service;
 import com.vinicius.sistema_pedidos_gestao.busines.dto.PedidoCadastroDTO;
+import com.vinicius.sistema_pedidos_gestao.busines.dto.PedidoResponseDTO;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.entitys.Pedido;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,16 @@ public class PedidoService {
 
     private final PedidoRepository repository;
 
-    public ResponseEntity<?> salvarPedido(@Valid PedidoCadastroDTO pedido) {
+    public ResponseEntity<?> salvarPedido(PedidoCadastroDTO pedido) {
 
+        // 1. Lógica de Validação de Negócio (Busca por pedido em andamento)
         Optional<Pedido> existePedido = repository.findByCpfAndStatus(pedido.getCpf(), "A");
 
         if(existePedido.isPresent()){
             return ResponseEntity.status(409).body("Ainda existe um pedido em andamento para você");
         }
 
+        // 2. Constrói a entidade Pedido a partir do DTO
         Pedido pedidoData = Pedido.builder()
                 .cliente(pedido.getCliente())
                 .cpf(pedido.getCpf())
@@ -37,8 +39,15 @@ public class PedidoService {
                 .valorTotal(pedido.getValorTotal())
                 .build();
 
-        repository.save(pedidoData);
-        return ResponseEntity.ok("Pedido realizado com sucesso!");
+        Pedido pedidoSalvo = repository.save(pedidoData);
+
+        PedidoResponseDTO pedidoDataTeste = PedidoResponseDTO.builder()
+                .id(pedidoSalvo.getId())
+                .dtPedido(pedidoSalvo.getDtPedido())
+                .status(pedidoSalvo.getStatus())
+                .build();
+
+        return ResponseEntity.ok().body(pedidoDataTeste);
     }
 
     public List<Pedido> buscarPedidos(LocalDate dtInicio, LocalDate dtFim, String cpf) {
