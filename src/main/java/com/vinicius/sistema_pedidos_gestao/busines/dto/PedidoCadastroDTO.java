@@ -16,7 +16,6 @@ public class PedidoCadastroDTO {
     @NotNull
     private String cliente;
 
-    @NotBlank
     @NotNull
     private String cpf;
 
@@ -27,7 +26,6 @@ public class PedidoCadastroDTO {
 
     private String status;
 
-    @NotNull
     @NotBlank
     private String formaPagamento;
 

@@ -5,45 +5,36 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "pedidos")
+@Table(name = "itensPedido")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pedido {
+public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // Está correto para Integer
     @NotNull
-    private String cliente;
+    private Integer idProduto;
 
+    // Está correto para Integer
     @NotNull
-    private String cpf;
+    private Integer idPedido;
 
+    // Usar apenas @NotBlank para String, pois já implica que não é nulo.
     @NotBlank
-    private String telefone;
-
-    private LocalDate dtPedido;
-
-    private String status;
-
-    private LocalDate dtFinalizacao;
-
-    private LocalDate dtCancelamento;
+    private String titulo;
 
     @NotNull
-    private String formaPagamento;
+    private Float valorUnitario;
 
     @NotNull
-    private Float totalItens;
-
-    @NotNull
-    private Float valorTotal;
+    private Float quantidade;
 
 }
