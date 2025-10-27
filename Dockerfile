@@ -18,7 +18,7 @@ WORKDIR /app
 EXPOSE 8080
 
 # Copia o JAR gerado no stage de build
-COPY --from=build /app/target/sistema-pedidos-users-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/sistema-pedidos-gestao-0.0.1-SNAPSHOT.jar app.jar
 
 # Comando para rodar o app
 ENTRYPOINT ["java", "-jar", "app.jar"]
