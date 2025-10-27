@@ -1,4 +1,4 @@
-package com.vinicius.sistema_pedidos_cliente.config;
+package com.vinicius.sistema_pedidos_gestao.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

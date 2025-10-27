@@ -21,7 +21,6 @@ public class Categoria {
     private String descricao;
 
     @NotBlank
-    @NotNull
     private String url;
 
     private Boolean ativo;
