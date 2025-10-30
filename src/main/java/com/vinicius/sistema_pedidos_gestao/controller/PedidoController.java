@@ -30,7 +30,7 @@ public class PedidoController {
     }
 
     @GetMapping("/buscar-pedidos")
-    public ResponseEntity<?> buscarTodos(@RequestParam LocalDate dtInicio, @RequestParam LocalDate dtFim, @RequestParam String cpf){
+    public ResponseEntity<?> buscarTodos(@RequestParam LocalDate dtInicio, @RequestParam LocalDate dtFim, @RequestParam(required = false) String cpf){
 
         List<Pedido> pedidos = service.buscarPedidos(dtInicio, dtFim, cpf);
         if(pedidos.isEmpty()){

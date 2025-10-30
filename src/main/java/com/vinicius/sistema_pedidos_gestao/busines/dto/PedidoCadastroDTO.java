@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -27,16 +28,10 @@ public class PedidoCadastroDTO {
     @NotBlank
     private String telefone;
 
-    private LocalDate dtPedido;
+    private LocalDateTime dtPedido;
 
     private String status;
 
     @NotBlank
     private String formaPagamento;
-
-    @NotNull
-    private Float totalItens;
-
-    @NotNull
-    private Float valorTotal;
 }

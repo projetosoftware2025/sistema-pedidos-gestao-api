@@ -49,11 +49,12 @@ public class CategoriaService {
             u.getId(),
             u.getDescricao(),
             // Monta a URL para o novo endpoint de imagem: /categorias/{id}/imagem
-            ServletUriComponentsBuilder.fromCurrentContextPath()
-              .path("/categoria/") // Deve coincidir com o @RequestMapping do Controller
-              .path(u.getId().toString())
-              .path("/imagem")
-              .toUriString(),
+//            ServletUriComponentsBuilder.fromCurrentContextPath()
+//              .path("/categoria/") // Deve coincidir com o @RequestMapping do Controller
+//              .path(u.getId().toString())
+//              .path("/imagem")
+//              .toUriString(),
+                  null,
             u.getAtivo()
           ))
           .toList();

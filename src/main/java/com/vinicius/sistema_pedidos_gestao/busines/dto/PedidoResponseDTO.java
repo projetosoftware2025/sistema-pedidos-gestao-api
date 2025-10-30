@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 public record PedidoResponseDTO(
         Integer id,
         String status,
-        LocalDate dtPedido
+        LocalDateTime dtPedido
 ) {
 }

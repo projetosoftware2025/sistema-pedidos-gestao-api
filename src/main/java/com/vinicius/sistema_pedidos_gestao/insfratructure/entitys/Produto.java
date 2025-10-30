@@ -7,7 +7,7 @@ import lombok.*;
 
 @Entity
 @org.hibernate.annotations.Proxy(lazy = true)
-@Table(name = "produtos_gestao") // ← Evita o hífen no nome da tabela (Postgres não gosta)
+@Table(name = "produtos") // ← Evita o hífen no nome da tabela (Postgres não gosta)
 @Getter
 @Setter
 @Builder

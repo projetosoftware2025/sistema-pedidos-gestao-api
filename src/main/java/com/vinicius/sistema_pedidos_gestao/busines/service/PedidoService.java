@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +32,10 @@ public class PedidoService {
         Pedido pedidoData = Pedido.builder()
                 .cliente(pedido.getCliente())
                 .cpf(pedido.getCpf())
-                .dtPedido(LocalDate.now())
+                .dtPedido(LocalDateTime.now())
                 .formaPagamento(pedido.getFormaPagamento())
                 .telefone(pedido.getTelefone())
                 .status("A")
-                .totalItens(pedido.getTotalItens())
-                .valorTotal(pedido.getValorTotal())
                 .build();
 
         Pedido pedidoSalvo = repository.save(pedidoData);
@@ -51,21 +50,33 @@ public class PedidoService {
     }
 
     public List<Pedido> buscarPedidos(LocalDate dtInicio, LocalDate dtFim, String cpf) {
-        return repository.findAllByDtPedidoBetweenAndCpf(dtInicio, dtFim, cpf)
-                .stream()
+        List<Pedido> resultados;
+
+        // Criando os limites com hora/minuto/segundo exatos antes de chamar o repositório
+        LocalDateTime dtInicioComHora = dtInicio.atStartOfDay(); // 00:00:00
+        LocalDateTime dtFimComHora = dtFim.atTime(23, 59, 59); // 23:59:59
+
+        if (cpf != null && !cpf.isBlank()) {
+            // Busca filtrando por CPF
+            resultados = repository.findAllByDtPedidoBetweenAndCpf(dtInicioComHora, dtFimComHora, cpf);
+        } else {
+            // Busca apenas pelo intervalo de datas
+            resultados = repository.findAllByDtPedidoBetween(dtInicioComHora, dtFimComHora);
+        }
+
+        return resultados.stream()
                 .map(u -> Pedido.builder()
                         .id(u.getId())
-                        .cliente((u.getCliente()))
+                        .cliente(u.getCliente())
                         .cpf(u.getCpf())
                         .status(u.getStatus())
                         .telefone(u.getTelefone())
                         .dtPedido(u.getDtPedido())
-                        .totalItens(u.getTotalItens())
                         .formaPagamento(u.getFormaPagamento())
-                        .valorTotal(u.getValorTotal())
                         .build())
                 .toList();
     }
+
 
     @Transactional
     public void deletarPorId(Integer id) {

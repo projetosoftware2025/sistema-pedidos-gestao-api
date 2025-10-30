@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pedidos")
@@ -29,7 +30,7 @@ public class Pedido {
     @NotBlank
     private String telefone;
 
-    private LocalDate dtPedido;
+    private LocalDateTime dtPedido;
 
     private String status;
 
@@ -40,10 +41,5 @@ public class Pedido {
     @NotNull
     private String formaPagamento;
 
-    @NotNull
-    private Float totalItens;
-
-    @NotNull
-    private Float valorTotal;
 
 }
