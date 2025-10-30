@@ -1,12 +1,10 @@
 package com.vinicius.sistema_pedidos_gestao.insfratructure.entitys;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "categorias")
+@Table(name = "categorias_gestao")
 @Getter
 @Setter
 @Builder
@@ -20,8 +18,9 @@ public class Categoria {
 
     private String descricao;
 
-    @NotBlank
-    private String url;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] imagem; // armazena a imagem em bytes
 
     private Boolean ativo;
 }

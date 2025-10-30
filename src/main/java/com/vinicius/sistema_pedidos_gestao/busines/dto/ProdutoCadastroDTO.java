@@ -1,13 +1,11 @@
 package com.vinicius.sistema_pedidos_gestao.busines.dto;
 
-import jakarta.validation.constraints.Email;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
 
 @Data
-@Builder
 public class ProdutoCadastroDTO {
 
     @NotBlank(message = "Título é obrigatório")
@@ -19,8 +17,8 @@ public class ProdutoCadastroDTO {
     @NotNull(message = "Preço é obrigatório")
     private Float preco;
 
-    @NotBlank(message = "Url é obrigatório")
-    private String url;
+    // Recebe a imagem no formato multipart
+    private MultipartFile imagem;
 
     @NotBlank(message = "Categoria é obrigatório")
     private String categoria;

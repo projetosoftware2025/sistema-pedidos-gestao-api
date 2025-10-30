@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
-@Table(name = "produtos")
+@org.hibernate.annotations.Proxy(lazy = true)
+@Table(name = "produtos_gestao") // ← Evita o hífen no nome da tabela (Postgres não gosta)
 @Getter
 @Setter
 @Builder
@@ -29,9 +30,11 @@ public class Produto {
     @NotNull
     private Float preco;
 
-    @NotBlank
-    @NotNull
-    private String url;
+    // ⚡ Imagem armazenada em bytes, carregamento preguiçoso (não vem junto na listagem)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "imagem")
+    private byte[] imagem;
 
     @NotNull
     private String categoriaId;

@@ -1,13 +1,15 @@
 package com.vinicius.sistema_pedidos_gestao.busines.service;
+
 import com.vinicius.sistema_pedidos_gestao.busines.dto.ProdutoCadastroDTO;
+import com.vinicius.sistema_pedidos_gestao.busines.dto.ProdutoResponseDTO;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.entitys.Produto;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.repository.ProdutoRepository;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,44 +19,64 @@ public class ProdutoService {
 
     private final ProdutoRepository repository;
 
-    public ResponseEntity<?> salvarProduto(@Valid ProdutoCadastroDTO produto) {
+    /**
+     * 🚀 Cadastra um novo produto com imagem em bytes
+     */
+    @Transactional
+    public ResponseEntity<?> salvarProduto(ProdutoCadastroDTO produto) {
         if (repository.findByTitulo(produto.getTitulo()).isPresent()) {
             return ResponseEntity.badRequest().body("Produto já cadastrado!");
         }
 
-        Produto produtoData = Produto.builder()
-                .titulo(produto.getTitulo())
-                .descricao(produto.getDescricao())
-                .preco(produto.getPreco())
-                .url(produto.getUrl())
-                .categoriaId(produto.getCategoria())
-                .ativo(true)
-                .build();
+        try {
+            Produto produtoData = Produto.builder()
+              .titulo(produto.getTitulo())
+              .descricao(produto.getDescricao())
+              .preco(produto.getPreco())
+              .imagem(produto.getImagem() != null ? produto.getImagem().getBytes() : null)
+              .categoriaId(produto.getCategoria())
+              .ativo(true)
+              .build();
 
-        repository.save(produtoData);
-        return ResponseEntity.ok("Produto cadastrado com sucesso!");
+            repository.save(produtoData);
+            return ResponseEntity.ok("Produto cadastrado com sucesso!");
+
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Erro ao processar imagem: " + e.getMessage());
+        }
     }
 
-    public List<Produto> buscarAtivos() {
-        return repository.findAllByAtivo(true)
-                .stream()
-                .map(u -> Produto.builder()
-                        .id(u.getId())
-                        .titulo((u.getTitulo()))
-                        .descricao(u.getDescricao())
-                        .preco(u.getPreco())
-                        .categoriaId(u.getCategoriaId())
-                        .url(u.getUrl())
-                        .ativo(u.getAtivo())
-                        .build())
-                .toList();
+    /**
+     * ⚡ Busca produtos ativos SEM carregar imagens (muito mais rápido)
+     */
+    @Transactional(readOnly = true)
+    public List<ProdutoResponseDTO> buscarAtivos() {
+        // Consulta customizada no repositório que já retorna DTO sem imagem
+        return repository.buscarAtivosSemImagem();
     }
 
+    /**
+     * 🖼️ Busca somente a imagem do produto por ID
+     */
+    @Transactional(readOnly = true)
+    public byte[] buscarImagem(Integer id) {
+        return repository.findById(id)
+          .map(Produto::getImagem)
+          .orElse(null);
+    }
+
+    /**
+     * ❌ Exclui um produto pelo ID
+     */
     @Transactional
     public void deletarPorId(Integer id) {
         repository.deleteById(id);
     }
 
+    /**
+     * 🔁 Atualiza um produto parcialmente
+     */
+    @Transactional
     public ResponseEntity<?> atualizarProdutoPorId(Integer id, Produto produtoAtualizado) {
         Optional<Produto> produtoOpt = repository.findById(id);
         if (produtoOpt.isEmpty()) {
@@ -66,14 +88,11 @@ public class ProdutoService {
         if (produtoAtualizado.getTitulo() != null) produto.setTitulo(produtoAtualizado.getTitulo());
         if (produtoAtualizado.getDescricao() != null) produto.setDescricao(produtoAtualizado.getDescricao());
         if (produtoAtualizado.getPreco() != null) produto.setPreco(produtoAtualizado.getPreco());
-        if (produtoAtualizado.getUrl() != null) produto.setUrl(produtoAtualizado.getUrl());
+        if (produtoAtualizado.getImagem() != null) produto.setImagem(produtoAtualizado.getImagem());
         if (produtoAtualizado.getCategoriaId() != null) produto.setCategoriaId(produtoAtualizado.getCategoriaId());
         if (produtoAtualizado.getAtivo() != null) produto.setAtivo(produtoAtualizado.getAtivo());
 
         repository.save(produto);
         return ResponseEntity.ok("Produto atualizado com sucesso!");
     }
-
-
-
 }
