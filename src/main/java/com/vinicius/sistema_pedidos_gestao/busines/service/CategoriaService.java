@@ -2,6 +2,7 @@ package com.vinicius.sistema_pedidos_gestao.busines.service;
 
 import com.vinicius.sistema_pedidos_gestao.busines.dto.CategoriaCadastroDTO;
 import com.vinicius.sistema_pedidos_gestao.busines.dto.CategoriaResponseDTO;
+import com.vinicius.sistema_pedidos_gestao.busines.dto.ProdutoResponseDTO;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.entitys.Categoria;
 import com.vinicius.sistema_pedidos_gestao.insfratructure.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,24 +41,30 @@ public class CategoriaService {
         }
     }
 
-    // Método que agora retorna o DTO com a URL da imagem
+//    // Método que agora retorna o DTO com a URL da imagem
+//    @Transactional(readOnly = true)
+//    public List<CategoriaResponseDTO> buscarAtivos() {
+//        return repository.findAllByAtivo(true)
+//          .stream()
+//          .map(u -> new CategoriaResponseDTO( // Mapeando para o DTO
+//            u.getId(),
+//            u.getDescricao(),
+//            // Monta a URL para o novo endpoint de imagem: /categorias/{id}/imagem
+////            ServletUriComponentsBuilder.fromCurrentContextPath()
+////              .path("/categoria/") // Deve coincidir com o @RequestMapping do Controller
+////              .path(u.getId().toString())
+////              .path("/imagem")
+////              .toUriString(),
+//                  null,
+//            u.getAtivo()
+//          ))
+//          .toList();
+//    }
+
     @Transactional(readOnly = true)
     public List<CategoriaResponseDTO> buscarAtivos() {
-        return repository.findAllByAtivo(true)
-          .stream()
-          .map(u -> new CategoriaResponseDTO( // Mapeando para o DTO
-            u.getId(),
-            u.getDescricao(),
-            // Monta a URL para o novo endpoint de imagem: /categorias/{id}/imagem
-//            ServletUriComponentsBuilder.fromCurrentContextPath()
-//              .path("/categoria/") // Deve coincidir com o @RequestMapping do Controller
-//              .path(u.getId().toString())
-//              .path("/imagem")
-//              .toUriString(),
-                  null,
-            u.getAtivo()
-          ))
-          .toList();
+        // Consulta customizada no repositório que já retorna DTO sem imagem
+        return repository.buscarAtivosSemImagem();
     }
 
     // NOVO MÉTODO: Busca apenas os bytes da imagem por ID (usado pelo Controller de imagem)

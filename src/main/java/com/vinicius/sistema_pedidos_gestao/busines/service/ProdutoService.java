@@ -55,19 +55,12 @@ public class ProdutoService {
         return repository.buscarAtivosSemImagem();
     }
 
-    /**
-     * 🖼️ Busca somente a imagem do produto por ID
-     */
     @Transactional(readOnly = true)
     public byte[] buscarImagem(Integer id) {
-        return repository.findById(id)
-          .map(Produto::getImagem)
+        return repository.buscarImagem(id)
           .orElse(null);
     }
 
-    /**
-     * ❌ Exclui um produto pelo ID
-     */
     @Transactional
     public void deletarPorId(Integer id) {
         repository.deleteById(id);
