@@ -1,10 +1,14 @@
 package com.vinicius.sistema_pedidos_gestao.busines.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@Getter
+@Setter
 @Data
 public class ProdutoCadastroDTO {
 

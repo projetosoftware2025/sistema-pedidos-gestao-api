@@ -66,11 +66,8 @@ public class ProdutoService {
         repository.deleteById(id);
     }
 
-    /**
-     * 🔁 Atualiza um produto parcialmente
-     */
     @Transactional
-    public ResponseEntity<?> atualizarProdutoPorId(Integer id, Produto produtoAtualizado) {
+    public ResponseEntity<?> atualizarProdutoPorId(Integer id, ProdutoCadastroDTO dto) {
         Optional<Produto> produtoOpt = repository.findById(id);
         if (produtoOpt.isEmpty()) {
             return ResponseEntity.status(404).body("Produto não encontrado!");
@@ -78,14 +75,24 @@ public class ProdutoService {
 
         Produto produto = produtoOpt.get();
 
-        if (produtoAtualizado.getTitulo() != null) produto.setTitulo(produtoAtualizado.getTitulo());
-        if (produtoAtualizado.getDescricao() != null) produto.setDescricao(produtoAtualizado.getDescricao());
-        if (produtoAtualizado.getPreco() != null) produto.setPreco(produtoAtualizado.getPreco());
-        if (produtoAtualizado.getImagem() != null) produto.setImagem(produtoAtualizado.getImagem());
-        if (produtoAtualizado.getCategoriaId() != null) produto.setCategoriaId(produtoAtualizado.getCategoriaId());
-        if (produtoAtualizado.getAtivo() != null) produto.setAtivo(produtoAtualizado.getAtivo());
+        if (dto.getTitulo() != null) produto.setTitulo(dto.getTitulo());
+        if (dto.getDescricao() != null) produto.setDescricao(dto.getDescricao());
+        if (dto.getPreco() != null) produto.setPreco(dto.getPreco());
+        if (dto.getCategoria() != null) produto.setCategoriaId(dto.getCategoria());
+
+        // 🔥 Se veio imagem nova, substitui
+        if (dto.getImagem() != null && !dto.getImagem().isEmpty()) {
+            try {
+                produto.setImagem(dto.getImagem().getBytes());
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Erro ao processar imagem");
+            }
+        }
+
+        if (dto.getAtivo() != null) produto.setAtivo(dto.getAtivo());
 
         repository.save(produto);
         return ResponseEntity.ok("Produto atualizado com sucesso!");
     }
+
 }

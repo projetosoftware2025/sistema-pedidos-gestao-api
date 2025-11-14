@@ -50,9 +50,13 @@ public class ProdutoController {
         return ResponseEntity.ok("Produto deletado com sucesso!");
     }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<?> atualizar(@RequestParam Integer id, @RequestBody Produto produto) {
-        return produtoService.atualizarProdutoPorId(id, produto);
+    @PutMapping(value = "/atualizar", consumes = "multipart/form-data")
+    public ResponseEntity<?> atualizar(
+      @RequestParam Integer id,
+      @ModelAttribute ProdutoCadastroDTO dto
+    ) {
+        return produtoService.atualizarProdutoPorId(id, dto);
     }
+
 
 }
