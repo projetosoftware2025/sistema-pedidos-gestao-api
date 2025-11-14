@@ -14,7 +14,7 @@ public class CorsConfig {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-          .allowedOrigins("http://localhost:3000", "https://suculentus-ui.onrender.com")
+          .allowedOrigins("http://localhost:3000", "http://localhost:3001/", "https://suculentus-ui.onrender.com", "https://suculentus-client-ui.onrender.com")
           .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
           .allowedHeaders("*")
           .allowCredentials(true);
