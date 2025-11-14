@@ -26,4 +26,6 @@ public class ProdutoCadastroDTO {
 
     @NotBlank(message = "Categoria é obrigatório")
     private String categoria;
+
+    private Boolean ativo;
 }
