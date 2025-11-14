@@ -21,7 +21,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
     @Query("SELECT new com.vinicius.sistema_pedidos_gestao.busines.dto.ProdutoResponseDTO(" +
       "p.id, p.titulo, p.descricao, p.preco, p.categoriaId, null, p.ativo) " +
-      "FROM Produto p WHERE p.ativo = true")
+      "FROM Produto p WHERE p.ativo = true ORDER BY p.id ASC")
     List<ProdutoResponseDTO> buscarAtivosSemImagem();
 
 
